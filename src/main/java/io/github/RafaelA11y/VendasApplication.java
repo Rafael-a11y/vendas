@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 /*A anotação @SpringBootAplication é a anotação responsável para definir esta classe como a classe responsável por iniciar a aplicação Sping Boot*/
 @SpringBootApplication
+/*A anotação @RestController serve para que você possa enviar mensagens para o browser */
 @RestController
 public class VendasApplication
 {
@@ -33,7 +34,9 @@ public class VendasApplication
     {
         return args -> {this.animal.fazerBarulho();};
     }
-
+    /*Método que será executado quando uma requisição http get for feita, o método é executado em resposta à aquisição e irá retornar uma String. Note
+    * que dentro do parêntesis da anotação @GetMapping() temos o atributo path que recebe de valor uma url em forma de String, significa que este método
+    * será executado quando o usuário acessar essa url, exemplo: localhost:8081/hello*/
     @GetMapping(path = "/hello")
     public String helloWorld()
     {
