@@ -27,8 +27,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+    <!--Dependência do JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+    <!--Dependência do driver do banco de dados, h2 é um banco de dados que opera em memória, sendo assim, não há necessidade de se instalar um sistema
+     gerenciador de banco de dados, um SGBD-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
-        <!--Para poder usar @RestController para web-->
+        <!--Para poder usar @RestController para web, esta dependência também serve para testar conexão com banco de dados em memória, o H2.
+        Isso acontece porquê o banco de dados H2 é uma aplicação web, e para podermos acessá-lo, devemos definir sua url no application.properties
+        com o comando de chave valor spring.h2.console.path=/h2-console-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
