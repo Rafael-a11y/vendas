@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 public class Clientes
 {
     /*A constante String INSERT representa a inserção em SQL na tabela CLIENTE dentro de nosso esquema*/
-    private static final String INSERT = "INSERT INTO CLIENTE(NOME) VALUES(?)";
+//  private static final String INSERT = "INSERT INTO CLIENTE(NOME) VALUES(?)";
     private static final String SELECT_ALL = "SELECT * FROM CLIENTE";
     private static final String UPDATE = "UPDATE CLIENTE SET NOME = ? WHERE ID = ?";
     private static final String DELETE = "DELETE FROM CLIENTE WHERE ID = ?";
@@ -27,10 +29,17 @@ public class Clientes
     JdbcTemplate jdbcTemplate;
     /*O método JdbcTemplate update(String sql, Object[]) suporta operações de inserção, alteração e deleção, seu primeiro parâmetro é a String SQL e o
     * segundo parâmetro é um array de Object contendo os parâmetros do objeto.*/
-    public void salvarCliente(Cliente cliente)
+
+    /*A anotação @Trasactional de org.springframework.transaction.annotation.Transactional é usada para gente não precisar ficar chamando os métodos
+    * entityManager.getTransaction().begin e entityManager.getTransaction().begin antes e após o entityManager.persist(cliente) respectivamente*/
+    @Autowired
+    EntityManager entityManager;
+    @Transactional
+    public Cliente salvarCliente(Cliente cliente)
     {
-        jdbcTemplate.update(INSERT, new Object[]{cliente.getNome()});
-        return;
+        entityManager.persist(cliente);
+//      jdbcTemplate.update(INSERT, new Object[]{cliente.getNome()});
+        return cliente;
     }
     /*O método obterTodos() recupera todos os registros da tabela CLIENTE que está dentro do banco de dados. O método query(String query, RowMapper rm<E>)
     * recebe a String SQL de consulta enquanto que o objeto RowMapper<Cliente> recupera o ResultSet rs e mapeia os registros dentro dele para a classe entre
