@@ -19,7 +19,7 @@ public class VendasApplication
     * também o método inicar não foi explícitamente chamado, o Spring criou um objeto anônimo que chamou o método iniciar().
     * O método iniciar irá salvar dois Cliente's na base dados e logo em seguida, irá recuperar estes dados através da chamada do método obterTodos()
     * que retorna uma lista preenchida com todos os registros da tabela CLIENTE inseridos dentro de objetos Cliente, logo em seguida, essa lista de
-    * Cliente é impriomida no console a partir de um foreach(System.out::println)*/
+    * Cliente é imprimida no console a partir de um foreach(System.out::println)*/
     @Bean
     CommandLineRunner iniciar(@Autowired Clientes clientes)
     {
@@ -53,7 +53,7 @@ public class VendasApplication
 
     public static void main(String[] args)
     {
-        /*Método responsável por niciar a aplicação Spring Boot, recebe como parâmetro, a classe responsável pela inicialização da aplicação (a classe
+        /*Método responsável por iniciar a aplicação Spring Boot, recebe como parâmetro, a classe responsável pela inicialização da aplicação (a classe
         que possui a anotação @SpringBootAplication), e o array String fornecido pelo main().*/
         SpringApplication.run(VendasApplication.class, args);
     }
