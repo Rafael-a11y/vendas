@@ -88,6 +88,7 @@ public class Clientes
     @Transactional
     public void deletar(Cliente cliente)
     {
+        if(!entityManager.contains(cliente)) cliente = entityManager.merge(cliente);
         entityManager.remove(cliente);
 //      deletar(cliente.getId());
         return;
