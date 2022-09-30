@@ -16,35 +16,33 @@ public class VendasApplication
 {
     /*A anotação @Bean serve para aplicar a injeção de dependência, repare que o método CommandLineRunner iniciar() não é chamado dentro do main(), note
     * também que seu objeto não foi declarado em momento nenhum (pois, iniciar() não é um método estático), ou seja, nem seu objeto foi declrado como
-    * também o método inicar não foi explícitamente chamado, o Spring criou um objeto anônimo que chamou o método iniciar().
-    * O método iniciar irá salvar dois Cliente's na base dados e logo em seguida, irá recuperar estes dados através da chamada do método obterTodos()
-    * que retorna uma lista preenchida com todos os registros da tabela CLIENTE inseridos dentro de objetos Cliente, logo em seguida, essa lista de
-    * Cliente é imprimida no console a partir de um foreach(System.out::println)*/
+    * também o método inicar não foi explícitamente chamado, o Spring criou um objeto anônimo que chamou o método iniciar() por conta da anotação @Bean.
+    * */
     @Bean
     CommandLineRunner iniciar(@Autowired Clientes clientes)
     {
         return args -> {
             System.out.println("Salvando clientes...");
-            clientes.salvarCliente(new Cliente("Rafael Souto"));
-            clientes.salvarCliente(new Cliente("Israel Souto"));
+            clientes.save(new Cliente("Rafael Souto"));
+            clientes.save(new Cliente("Israel Souto"));
 
             System.out.println("Imprimindo clientes salvos...");
-            List<Cliente> listaDeClientes = clientes.obterTodos();
+            List<Cliente> listaDeClientes = clientes.findAll();
             listaDeClientes.forEach(System.out::println);
 
             System.out.println("Atualizando clientes...");
             listaDeClientes.forEach(c -> {c.setNome(c.getNome() + " atualizado.");
-                                            clientes.atualizar(c);
+                                            clientes.save(c); //save(S entity) também suporta operação de atualização
                                         });
 
             System.out.println("Buscando clientes por nome...");
-            clientes.buscarPorNome("Ra").forEach(System.out::println);
+            clientes.findByNomeLike("Ra").forEach(System.out::println);
 
             System.out.println("Deletando clientes...");
-            listaDeClientes = clientes.obterTodos();
-            listaDeClientes.forEach(c -> clientes.deletar(c));
+            listaDeClientes = clientes.findAll();
+            listaDeClientes.forEach(c -> clientes.delete(c));
 
-            listaDeClientes = clientes.obterTodos();
+            listaDeClientes = clientes.findAll();
             if (listaDeClientes.isEmpty()) System.out.println("Nenhum cliente encontrado");
             else  listaDeClientes.forEach(System.out::println);
         };
