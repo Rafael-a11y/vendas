@@ -26,6 +26,9 @@ public class VendasApplication
             clientes.save(new Cliente("Rafael Souto"));
             clientes.save(new Cliente("Israel Souto"));
 
+            List<Cliente> resultado = clientes.encontrarPorNomeComSqlNativo("Rafael");
+            resultado.forEach(System.out::println);
+
             System.out.println("Imprimindo clientes salvos...");
             List<Cliente> listaDeClientes = clientes.findAll();
             listaDeClientes.forEach(System.out::println);
@@ -40,7 +43,7 @@ public class VendasApplication
 
             System.out.println("Deletando clientes...");
             listaDeClientes = clientes.findAll();
-            listaDeClientes.forEach(c -> clientes.delete(c));
+            listaDeClientes.forEach(c -> clientes.deleteByNomeComQuery(c.getNome()));
 
             listaDeClientes = clientes.findAll();
             if (listaDeClientes.isEmpty()) System.out.println("Nenhum cliente encontrado");
