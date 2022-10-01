@@ -29,12 +29,20 @@ public interface Clientes extends JpaRepository<Cliente, Integer>
     @Query(value = "select c from Cliente c where c.nome like :nome")
     List<Cliente> encontrarPorNome(@Param("nome") String nome);
 
+    /*Você também pode usar o atributo nativeQuery = true para pode usar consultas nativas em SQL
+    * caso não goste de usar jpql,claro que a String deve conter um valor de consulta SQL, óbvio.*/
     @Query(value = "select * from cliente c where c.nome like '%:nome%' ", nativeQuery = true)
     List<Cliente> encontrarPorNomeComSqlNativo(@Param("nome") String nome);
 
+    /*Caso você queira usar query methods para fazer algum tipo de alteração na tabela como deletar
+    * um registro, use a anotação @Transactional*/
     @Transactional
     void deleteByNome(String nome);
 
+    /*No caso de query customizadas que também fazem algum tipo de alteração na tabela como a
+    * exclusão de um registro, use além do @Transactional, o @Modifying, que tem o mesmo objetiivo
+    * que @Transactional, mas é usado em query customizadas que fazem alterações na tabela como a
+    * exclusão de um registro.*/
     @Transactional
     @Modifying
     @Query(value = "delete from Cliente c where c.nome=:nome")
