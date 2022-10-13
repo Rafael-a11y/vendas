@@ -1,20 +1,35 @@
 package io.github.RafaelA11y.domain.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
+@Entity @Table(name = "pedido")
 public class Pedido
 {
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
     private Integer id;
+
+    @ManyToOne @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-    private LocalDate data_Pedido;
+
+    @Column(name = "data_pedido")
+    private LocalDate dataPedido;
+
+
+    /*Como o tipo equivalente no banco é numeric(20,2), é necessário especificar isso na classe equivalente, usando o atributo
+    * length = 20 e o precision = 2*/
+    @Column(name = "preco_total", length = 20, precision = 2)
     private BigDecimal precoTotal;
 
-    public Integer getId()
-    {
-        return this.id;
-    }
+    /*Usamos o Atributo mappedBy porque a tabela item_pedido possui uma foreign pedido_id que aponta para a tabela pedido, para tornar os
+     dados da tabela pedido visível para a tabela item_pedido, usa-se o @OneToMany(mappedBy = 'cliente') para que seja possível a partir de
+     uma instância da classe Pedido, puxar os registros da tabela item_pedido, dando uma visão bidirecional dos dados*/
+    @OneToMany(mappedBy = "pedido")
+    private Set<ItemPedido> itens;
 
+    public Integer getId() {return this.id;}
 
     public void setId(Integer id)
     {
@@ -31,14 +46,14 @@ public class Pedido
         this.cliente = cliente;
     }
 
-    public LocalDate getData_Pedido()
+    public LocalDate getDataPedido()
     {
-        return data_Pedido;
+        return dataPedido;
     }
 
-    public void setData_Pedido(LocalDate data_Pedido)
+    public void setDataPedido(LocalDate dataPedido)
     {
-        this.data_Pedido = data_Pedido;
+        this.dataPedido = dataPedido;
     }
 
     public BigDecimal getPrecoTotal()
@@ -49,5 +64,18 @@ public class Pedido
     public void setPrecoTotal(BigDecimal precoTotal)
     {
         this.precoTotal = precoTotal;
+    }
+
+    public Set<ItemPedido> getItens() {return itens;}
+
+    public void setItens(Set<ItemPedido> itens) {this.itens = itens;}
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                ", dataPedido=" + dataPedido +
+                ", precoTotal=" + precoTotal +
+                '}';
     }
 }
