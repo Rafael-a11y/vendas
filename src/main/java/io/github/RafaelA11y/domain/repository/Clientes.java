@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /*A interface JpaRepository serve para substituir uma classe com @Repository, pois assim o programador não irá precisar
  implementar na mão os métodos de persistência, pois a interface já possui esses métodos, note que não é preciso
@@ -55,5 +56,5 @@ public interface Clientes extends JpaRepository<Cliente, Integer>
     @Query("select c from Cliente c left join fetch c.pedidos where c.id = :id")
     Cliente findClienteFetchPedidos(@Param("id") Integer id);
 
-
+    Optional<Cliente> findById(Integer id);
 }

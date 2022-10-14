@@ -11,7 +11,8 @@ public class Pedido
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
     private Integer id;
 
-    @ManyToOne @JoinColumn(name = "cliente_id")
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     @Column(name = "data_pedido")
@@ -19,8 +20,8 @@ public class Pedido
 
 
     /*Como o tipo equivalente no banco é numeric(20,2), é necessário especificar isso na classe equivalente, usando o atributo
-    * length = 20 e o precision = 2*/
-    @Column(name = "preco_total", length = 20, precision = 2)
+    * precision = 20 e o scale = 2*/
+    @Column(name = "preco_total", precision = 20, scale = 2)
     private BigDecimal precoTotal;
 
     /*Usamos o Atributo mappedBy porque a tabela item_pedido possui uma foreign pedido_id que aponta para a tabela pedido, para tornar os
@@ -28,6 +29,26 @@ public class Pedido
      uma instância da classe Pedido, puxar os registros da tabela item_pedido, dando uma visão bidirecional dos dados*/
     @OneToMany(mappedBy = "pedido")
     private Set<ItemPedido> itens;
+
+    public Pedido(){}
+
+    public Pedido adicionarCliente(Cliente cliente)
+    {
+        this.setCliente(cliente);
+        return this;
+    }
+
+    public Pedido adicionarDataPedido(LocalDate data)
+    {
+        this.setDataPedido(data);
+        return this;
+    }
+
+    public Pedido adicionarPreco(BigDecimal valor)
+    {
+        this.setPrecoTotal(valor);
+        return this;
+    }
 
     public Integer getId() {return this.id;}
 

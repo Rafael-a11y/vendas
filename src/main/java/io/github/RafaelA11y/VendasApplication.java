@@ -4,6 +4,7 @@ import io.github.RafaelA11y.domain.entity.Cliente;
 import io.github.RafaelA11y.domain.entity.Pedido;
 import io.github.RafaelA11y.domain.repository.Clientes;
 import io.github.RafaelA11y.domain.repository.Pedidos;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /*A anotação @SpringBootAplication é a anotação responsável para definir esta classe como a classe responsável por iniciar a aplicação Sping Boot*/
 @SpringBootApplication
@@ -26,21 +28,18 @@ public class VendasApplication
     CommandLineRunner iniciar(@Autowired Clientes clientes, @Autowired Pedidos pedidos)
     {
         return args -> {
-            System.out.println("Salvando clientes...");
-            Cliente fulano = new Cliente("Fulano");
-            clientes.save(fulano);
+            clientes.save(new Cliente("Rafael"));
+            Cliente cliente = clientes.findById(1).get();
 
-            Pedido p = new Pedido();
-            p.setCliente(fulano);
-            p.setDataPedido(LocalDate.now());
-            p.setPrecoTotal(BigDecimal.valueOf(100));
+            Pedido pedido = new Pedido().adicionarCliente(cliente).adicionarDataPedido(LocalDate.now()).adicionarPreco(BigDecimal.valueOf(100L));
+            pedidos.save(pedido);
 
-           // pedidos.save(p);
-
-            Cliente cliente = clientes.findClienteFetchPedidos(fulano.getId());
-            System.out.println(cliente);
-            System.out.println(cliente.getPedidos());
-
+            System.out.println("Imprimindo o cliente -> " + cliente);
+            //Vai dar erro por tentar carregar os pedidos do objeto sendo que a busca está definida como preguiçosa, LAZY.
+//            System.out.println("Imprimindo os pedidos de cliente -> " + cliente.getPedidos());
+            System.out.print("Imprimindo os pedidos de cliente -> ");
+            pedidos.findByCliente(cliente).stream().forEach(System.out::println);
+//            pedidos.findByCliente(cliente.get()).stream().forEach(System.out::println);
         };
 
     }

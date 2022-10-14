@@ -1,6 +1,9 @@
 package io.github.RafaelA11y.domain.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 // name = o nome que a tabela a ser criada terá.
 @Entity
@@ -26,8 +29,8 @@ public class Cliente
      uma instância da classe Cliente, puxar os registros da tabela pedido, dando uma visão bidirecional dos dados. A prppriedade FetchType.LAZY serve
      para quando um cliente for carregado, os pedidos associados a ele não serem carregados juntos, pois pode tornar a pesquisa desnecessariamente
      custosa em termo de processamento.*/
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
-    private Set<Pedido> pedidos;
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private List<Pedido> pedidos;
 
     public Cliente(String nome, Integer id)
     {
@@ -55,9 +58,13 @@ public class Cliente
         this.nome = nome;
     }
 
-    public Set<Pedido> getPedidos() {return pedidos;}
+    public List<Pedido> getPedidos()
+    {
+        if(pedidos == null) pedidos = new ArrayList<>();
+        return pedidos;
+    }
 
-    public void setPedidos(Set<Pedido> pedidos) {this.pedidos = pedidos;}
+    public void setPedidos(List<Pedido> pedidos) {this.pedidos = pedidos;}
 
     @Override
     public String toString() {
