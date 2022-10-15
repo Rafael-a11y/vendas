@@ -41,7 +41,7 @@
 
         <!--Para poder usar @RestController para web, esta dependência também serve para testar conexão com banco de dados em memória, o H2.
         Isso acontece porquê o banco de dados H2 é uma aplicação web, e para podermos acessá-lo, devemos definir sua url no application.properties
-        com o comando de chave valor spring.h2.console.path=/h2-console-->
+        com o comando de chave valor spring.h2.console.path=/h2-console. Certifique-se de ter esta dependência quando for trabalhar com REST.-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
