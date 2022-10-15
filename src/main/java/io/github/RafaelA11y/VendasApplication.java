@@ -1,13 +1,27 @@
 package io.github.RafaelA11y;
 
+import io.github.RafaelA11y.domain.entity.Cliente;
+import io.github.RafaelA11y.domain.repository.Clientes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 /*A anotação @SpringBootAplication é a anotação responsável para definir esta classe como a classe responsável por iniciar a aplicação Sping Boot*/
 @SpringBootApplication
 public class VendasApplication
 {
-
+// O @Bean serve para o Spring executar o método.
+    @Bean
+    public CommandLineRunner commandLineRunner(@Autowired Clientes clientes)
+    {
+        return args ->
+        {
+            Cliente c = new Cliente("Rafael");
+            clientes.save(c);
+        };
+    }
 
     public static void main(String[] args)
     {
