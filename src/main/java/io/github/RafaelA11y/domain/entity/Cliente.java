@@ -1,5 +1,7 @@
 package io.github.RafaelA11y.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +30,10 @@ public class Cliente
      dados da tabela pedido visível para a classe Cliente, usa-se o @OneToMany(mappedBy = 'cliente') para que seja possível a partir de
      uma instância da classe Cliente, puxar os registros da tabela pedido, dando uma visão bidirecional dos dados. A prppriedade FetchType.LAZY serve
      para quando um cliente for carregado, os pedidos associados a ele não serem carregados juntos, pois pode tornar a pesquisa desnecessariamente
-     custosa em termo de processamento.*/
+     custosa em termo de processamento. O @JsonIgnore serve para que a propriedade em questão seja inorada e não seja passda para o Json quando devolcermos
+     json nno corpo da resposta da requisição. Claro que só faz sentido para consultas de busca preguiçosa. Voltar aqui para testar se os pedidos são
+     ignorados numa consulta em que eu quero os pedidos juntos hehe.*/
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Pedido> pedidos;
 
