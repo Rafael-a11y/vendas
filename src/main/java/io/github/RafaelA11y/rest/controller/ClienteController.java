@@ -3,10 +3,13 @@ package io.github.RafaelA11y.rest.controller;
 import io.github.RafaelA11y.domain.entity.Cliente;
 import io.github.RafaelA11y.domain.repository.Clientes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /*A anotação @Controller serve para definir a classe como controladora, é o controller que vai fazer a comunicação
@@ -83,6 +86,22 @@ public class ClienteController
                     {cliente.setId(clienteEncontrado.getId());
                         clientes.save(cliente);
                         return ResponseEntity.noContent().build();}).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /*ExampleMatcher mather serve serve para aplicar os devidos filtros de busca, matcher serve de parâmetro para Example of(T entity, ExampleMatcher param)
+      junto do objeto passado de parâmetro no nosso método find(). Logo usamos o método findAll(Example param) para aplicar o filtro em todos os clientes na
+      base de dados, o nosso método find() retorna a lista da busca com um http status 200 ok.*/
+    @GetMapping("/lista")
+    public ResponseEntity find(Cliente filtro)
+    {
+        String sql = "select * from cliente ";
+//        if(filtro.getNome() != null) sql.concat(" where nome = :nome ");
+//        if(filtro.getCpf() !=) sql.concat(" and cpf = :cpf");
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example example = Example.of(filtro, matcher);
+        List<Cliente> lista = clientes.findAll(example);
+        return ResponseEntity.ok(lista);
     }
 }
 
