@@ -88,7 +88,7 @@ public class ClienteController
                         return ResponseEntity.noContent().build();}).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /*ExampleMatcher mather serve serve para aplicar os devidos filtros de busca, matcher serve de parâmetro para Example of(T entity, ExampleMatcher param)
+    /*ExampleMatcher mather serve para aplicar os devidos filtros de busca, matcher serve de parâmetro para Example of(T entity, ExampleMatcher param)
       junto do objeto passado de parâmetro no nosso método find(). Logo usamos o método findAll(Example param) para aplicar o filtro em todos os clientes na
       base de dados, o nosso método find() retorna a lista da busca com um http status 200 ok.*/
     @GetMapping("/lista")
@@ -101,6 +101,7 @@ public class ClienteController
 
         Example example = Example.of(filtro, matcher);
         List<Cliente> lista = clientes.findAll(example);
+
         return ResponseEntity.ok(lista);
     }
 }
