@@ -51,7 +51,7 @@ public interface Clientes extends JpaRepository<Cliente, Integer>
     void deleteByNomeComQuery(@Param("nome") String nome);
 
     /*Na consulta, a cláusula left join c.pedidos serve para carregar todos os clientes que tem ou não pedidos, sem o
-    * left, o Spring carrega apenas os clientes que possuiem pedidos, no final a consulta retorna o cliente junto de
+    * left, o Spring carrega apenas os clientes que possuem pedidos, no final a consulta retorna o cliente junto de
     * seus pedidos*/
     @Query("select c from Cliente c left join fetch c.pedidos where c.id = :id")
     Cliente findClienteFetchPedidos(@Param("id") Integer id);
