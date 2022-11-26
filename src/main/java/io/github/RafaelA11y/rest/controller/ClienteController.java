@@ -71,7 +71,7 @@ public class ClienteController
     * Isso acontece porque o save() salva uma entidade caso esta não tenha um id (que é a nossa chave primária), mas caso a instância passada
     * para o save() já tenha um id que existe no banco de dados, o método save() irá atualizar esta instância no banco de dados.
     * Caso o cliente não seja encontrado no banco de dados com o id passado de parâmetro, então será retornada uma mensagem http de status 404 not found,
-    * sim pois o objetivo deste método não salvar um novo registro e sim atualiza-lo. Caso a operação seja um sucesso, isto é o cliente seja atualizado
+    * sim pois o objetivo deste método não é salvar um novo registro e sim atualiza-lo. Caso a operação seja um sucesso, isto é o cliente seja atualizado
     * uma mensagem http de status é retornada, 204 no content, já que o propósito é tualizar e não obter dados do cliente. */
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

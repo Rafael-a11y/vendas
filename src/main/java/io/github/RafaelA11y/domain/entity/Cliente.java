@@ -1,12 +1,17 @@
 package io.github.RafaelA11y.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 // name = o nome que a tabela a ser criada terá.
 @Entity
 @Table(name = "cliente")
@@ -20,8 +25,6 @@ public class Cliente
     private String nome;
     @Column(name = "cpf", length = 11)
     private String cpf;
-
-    public Cliente() {}
 
     public Cliente(String nome)
     {
@@ -43,45 +46,5 @@ public class Cliente
     {
         this.id = id;
         this.nome = nome;
-    }
-
-    public Integer getId()
-    {
-        return id;
-    }
-
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
-    public String getNome()
-    {
-        return nome;
-    }
-
-    public void setNome(String nome)
-    {
-        this.nome = nome;
-    }
-
-    public String getCpf() {return cpf;}
-
-    public void setCpf(String cpf) {this.cpf = cpf;}
-
-    public List<Pedido> getPedidos()
-    {
-        if(pedidos == null) pedidos = new ArrayList<>();
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {this.pedidos = pedidos;}
-
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
     }
 }

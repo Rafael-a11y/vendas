@@ -58,7 +58,14 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-       <!--Por enquanto vamos deixar de lado o security, o data-jpa-->
+       <!--Dependência do Lombok-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
     <!--pluguin do Spring Boot-->
     <build>

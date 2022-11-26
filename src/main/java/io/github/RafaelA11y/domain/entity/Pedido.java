@@ -1,10 +1,16 @@
 package io.github.RafaelA11y.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+@Data @AllArgsConstructor @NoArgsConstructor
 @Entity @Table(name = "pedido")
 public class Pedido
 {
@@ -12,7 +18,7 @@ public class Pedido
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente_id") //@JoinColumn serve para colunas que representam Foreign Keys no banco de dados
     private Cliente cliente;
 
     @Column(name = "data_pedido")
@@ -28,9 +34,7 @@ public class Pedido
      dados da tabela pedido visível para a tabela item_pedido, usa-se o @OneToMany(mappedBy = 'cliente') para que seja possível a partir de
      uma instância da classe Pedido, puxar os registros da tabela item_pedido, dando uma visão bidirecional dos dados*/
     @OneToMany(mappedBy = "pedido")
-    private Set<ItemPedido> itens;
-
-    public Pedido(){}
+    private List<ItemPedido> itens;
 
     public Pedido adicionarCliente(Cliente cliente)
     {
@@ -50,53 +54,9 @@ public class Pedido
         return this;
     }
 
-    public Integer getId() {return this.id;}
-
-    public void setId(Integer id)
+    public List<ItemPedido> getItens()
     {
-        this.id = id;
-    }
-
-    public Cliente getCliente()
-    {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente)
-    {
-        this.cliente = cliente;
-    }
-
-    public LocalDate getDataPedido()
-    {
-        return dataPedido;
-    }
-
-    public void setDataPedido(LocalDate dataPedido)
-    {
-        this.dataPedido = dataPedido;
-    }
-
-    public BigDecimal getPrecoTotal()
-    {
-        return precoTotal;
-    }
-
-    public void setPrecoTotal(BigDecimal precoTotal)
-    {
-        this.precoTotal = precoTotal;
-    }
-
-    public Set<ItemPedido> getItens() {return itens;}
-
-    public void setItens(Set<ItemPedido> itens) {this.itens = itens;}
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", dataPedido=" + dataPedido +
-                ", precoTotal=" + precoTotal +
-                '}';
+        if(this.itens == null) this.itens = new ArrayList<>();
+        return this.itens;
     }
 }
