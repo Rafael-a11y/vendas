@@ -22,8 +22,8 @@ import java.util.List;
 //      }
 public class PedidoDTO
 {
-    private Integer cliente;
-    private BigDecimal total;
+    private Integer cliente; //Representa o id do cliente
+    private BigDecimal total;//Representa o valor total do pedido
     private List<ItemPedidoDTO> itens; //Repare que o array do json é abstraído para uma List<ItemPedidoDTO> itens, ainda assim é necessário uma classe
     // ItemPedidoDTO para representar individualmente cada elemento do array do json.
 }

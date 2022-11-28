@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class ItemPedidoDTO
 {
-    private Integer produto;
-    private Integer quantidade;
+    private Integer produto; //Id do produto
+    private Integer quantidade;//Quantidade de itens.
 
 }

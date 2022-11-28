@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // O que acontece se eu remover esta anotação?
@@ -35,7 +36,7 @@ public class PedidoServiceImpl implements PedidoService
     @Transactional //Ou salva tudo com sucesso, ou nada é salvo. Caso algum erro aconteça, a aplicação dá um rollback, ou tudo é salvo corretamente
     public Pedido salvar(PedidoDTO dto) { //ou nada é salvo.
         Integer idCliente = dto.getCliente();
-        Cliente cliente = clientesRepository.findById(idCliente).orElseThrow(() -> new RegraNegocioException("Código de cliente inválido"));
+        Cliente cliente = clientesRepository.findById(idCliente).orElseThrow(() -> new RegraNegocioException("Código de cliente inválido: " + idCliente));
 
         Pedido pedido = new Pedido();
         pedido.setPrecoTotal(dto.getTotal());
@@ -62,5 +63,12 @@ public class PedidoServiceImpl implements PedidoService
                                             itemPedido.setProduto(produto);
                                             return itemPedido;
                                         }).collect(Collectors.toList());
+    }
+
+    /*Retorna um pedido pelo seu id (na verdade um Optional de Pedido, pois pode ser que a consulta não encontre nenhum Pedido com o id passado)*/
+    @Override
+    public Optional <Pedido> obterPedidoCompleto(Integer id)
+    {
+        return repository.findByIdFetchItens(id);
     }
 }
