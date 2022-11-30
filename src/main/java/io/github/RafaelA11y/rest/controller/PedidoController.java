@@ -2,10 +2,8 @@ package io.github.RafaelA11y.rest.controller;
 
 import io.github.RafaelA11y.domain.entity.ItemPedido;
 import io.github.RafaelA11y.domain.entity.Pedido;
-import io.github.RafaelA11y.rest.dto.InformacaoItemPedidoDTO;
-import io.github.RafaelA11y.rest.dto.InformacoesPedidoDTO;
-import io.github.RafaelA11y.rest.dto.ItemPedidoDTO;
-import io.github.RafaelA11y.rest.dto.PedidoDTO;
+import io.github.RafaelA11y.domain.enums.StatusPedido;
+import io.github.RafaelA11y.rest.dto.*;
 import io.github.RafaelA11y.service.PedidoService;
 import  static org.springframework.http.HttpStatus.*;
 
@@ -50,6 +48,17 @@ public class PedidoController
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Pedido não encontrado"));
     }
 
+    /*O método http put precisa de todos os campos informados para não preencher com nulo o campo do registro no banco de dados que não foi informado.
+    * Para isso não acontecer, usa-se o @Patch que também é um verbo http de atualuzação, mas serve para o caso em que queremos fazer apenas uma
+    * atualização particionada.*/
+    @PatchMapping(value = {"{id}"})
+    @ResponseStatus(NO_CONTENT)
+    public void updateStatus(@PathVariable(name = "id") Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto)
+    {
+        String novoStatus = dto.getNovoStatus();
+        service.atualizaStatusPedido(id, StatusPedido.valueOf(novoStatus));
+    }
+
     /*Retorna o InformaçõesPedidoDTO a partir do Desiger Pattern Builder (isso acontece por causa da anotação @Builder de Lombok na classe Informacoes
     PedidoDTO). Observe o método build() no final*/
     private InformacoesPedidoDTO converter(Pedido pedido)
@@ -59,6 +68,7 @@ public class PedidoController
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .total(pedido.getPrecoTotal())
+                .status(pedido.getStatus().toString()) //.name();
                 .itens(this.converter(pedido.getItens()))
                 .build();
     }

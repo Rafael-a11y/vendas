@@ -1,5 +1,6 @@
 package io.github.RafaelA11y.rest.controller;
 
+import io.github.RafaelA11y.exception.PedidoNaoEncontradoException;
 import io.github.RafaelA11y.exception.RegraNegocioException;
 import io.github.RafaelA11y.rest.ApiErrors;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,13 @@ public class ApplicationControllerAdvice
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleRegraNegocioException(RegraNegocioException ex)
     {
-        String mensagemErro = ex.getMessage();
-        return new ApiErrors(mensagemErro);
+        return new ApiErrors(ex.getMessage());
+    }
+
+    @ExceptionHandler(PedidoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrors handlePedidoNotFoundException(PedidoNaoEncontradoException ex)
+    {
+        return new ApiErrors(ex.getMessage());
     }
 }

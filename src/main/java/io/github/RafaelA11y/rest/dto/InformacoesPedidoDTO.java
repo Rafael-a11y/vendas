@@ -20,6 +20,7 @@ public class InformacoesPedidoDTO
     private String nomeCliente;
     private BigDecimal total;
     private String dataPedido;
+    private String status;
     private List<InformacaoItemPedidoDTO> itens;
 
 }

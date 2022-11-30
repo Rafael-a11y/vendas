@@ -4,14 +4,17 @@ import io.github.RafaelA11y.domain.entity.Cliente;
 import io.github.RafaelA11y.domain.entity.ItemPedido;
 import io.github.RafaelA11y.domain.entity.Pedido;
 import io.github.RafaelA11y.domain.entity.Produto;
+import io.github.RafaelA11y.domain.enums.StatusPedido;
 import io.github.RafaelA11y.domain.repository.Clientes;
 import io.github.RafaelA11y.domain.repository.ItensPedido;
 import io.github.RafaelA11y.domain.repository.Pedidos;
 import io.github.RafaelA11y.domain.repository.Produtos;
+import io.github.RafaelA11y.exception.PedidoNaoEncontradoException;
 import io.github.RafaelA11y.exception.RegraNegocioException;
 import io.github.RafaelA11y.rest.dto.ItemPedidoDTO;
 import io.github.RafaelA11y.rest.dto.PedidoDTO;
 import io.github.RafaelA11y.service.PedidoService;
+import io.github.RafaelA11y.exception.PedidoNaoEncontradoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,12 +45,23 @@ public class PedidoServiceImpl implements PedidoService
         pedido.setPrecoTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itensPedido = converterItens(pedido, dto.getItens());
         repository.save(pedido);
         itensPedidoRepository.saveAll(itensPedido);
         pedido.setItens(itensPedido);
         return pedido;
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatusPedido(Integer id, StatusPedido statusPedido)
+    {
+        repository.findById(id).map(pedidoEncontrado -> {
+            pedidoEncontrado.setStatus(statusPedido);
+            return repository.save(pedidoEncontrado);
+        }).orElseThrow(() -> new PedidoNaoEncontradoException());
     }
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens)

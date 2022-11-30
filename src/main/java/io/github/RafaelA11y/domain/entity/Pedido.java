@@ -1,5 +1,6 @@
 package io.github.RafaelA11y.domain.entity;
 
+import io.github.RafaelA11y.domain.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,11 @@ public class Pedido
     * precision = 20 e o scale = 2*/
     @Column(name = "preco_total", precision = 20, scale = 2)
     private BigDecimal precoTotal;
+
+    /*@Enumerated(EnumType.STRING) serve para o JPA transformar o campo enum da entidade em um campo string no banco de dados.*/
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private StatusPedido status;
 
     /*Usamos o Atributo mappedBy porque a tabela item_pedido possui uma foreign pedido_id que aponta para a tabela pedido, para tornar os
      dados da tabela pedido visível para a tabela item_pedido, usa-se o @OneToMany(mappedBy = 'cliente') para que seja possível a partir de
