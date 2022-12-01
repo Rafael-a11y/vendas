@@ -8,7 +8,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
+import javax.validation.Valid;
 import java.util.List;
 
 /*A anotação @RestController serve para definir a classe como controladora além de ser uma especificação de @Controller, com essa anotação não é preciso
@@ -40,10 +40,11 @@ public class ClienteController
 
     /*Aqui temos o método de salvar um novo cliente na base de dados, a anotação @ResponseBody serve para definir que iremos retornar algum dado, e a
     * @RequestBody se refere ao que iremos receber do Frontend, o método salva o cliente recebido e devolve o cliente salvo junto de uma mensagem de
-    * status http 200. */
+    * status http 200. Também é preciso adicionar a anotação @Valid porque a entidade Cliente usa javax.validation.constraints em um de seus campos.
+    * Caso @Valid não seja declarado, uma execução em tempo de execução acontecerá e uma mensagem 500 será gerada. */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar(@RequestBody Cliente cliente)
+    public Cliente salvar(@RequestBody @Valid Cliente cliente)
     {
         return clientes.save(cliente);
 
@@ -75,7 +76,7 @@ public class ClienteController
     * uma mensagem http de status é retornada, 204 no content, já que o propósito é tualizar e não obter dados do cliente. */
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable(name = "id") Integer id, @RequestBody Cliente cliente)
+    public void atualizar(@PathVariable(name = "id") Integer id, @RequestBody @Valid Cliente cliente)
     {
         clientes.findById(id).map(
                                     clienteEncontrado ->

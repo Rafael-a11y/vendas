@@ -3,6 +3,9 @@ package io.github.RafaelA11y.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -18,10 +21,16 @@ public class Produto
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
     private Integer id;
 
+    /*Campo descricao é validado por @NotEmpty que não aceita valor nulo ou em branco. */
     @Column(name = "descricao")
+    @NotEmpty(message = "Campo descrição é obrigatório")
     private String descricao;
 
+    /*Campo precoUnitario é validado por @NotNull, como se trata de uma caqmpo númerico, não existe a possibilidade de ser um valor vazio, ou é
+    * prenchido, ou é nulo, a anotação @Min especifica um valor mínimo, pois como sabemos, preço negativo não faz sentido. */
     @Column(name = "preco_unitario")
+    @NotNull(message = "Campo preço unitário é obrigatório")
+    @Min(value = 0, message = "O preço deve ser maior ou igual a zero")
     private BigDecimal precoUnitario;
 
 }

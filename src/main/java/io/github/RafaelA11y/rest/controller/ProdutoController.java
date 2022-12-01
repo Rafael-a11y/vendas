@@ -9,6 +9,7 @@ import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,9 +27,10 @@ public class ProdutoController
         return repository.findById(id).orElseThrow(() -> new ResponseStatusException(NO_CONTENT, "Produto não encontrado"));
     }
 
+    /*Adicionando a anotação @Valid para vcalidar a restrições ligadas aos campos da entidade produto.*/
     @PostMapping()
     @ResponseStatus(CREATED)
-    public Produto save(@RequestBody Produto produto)
+    public Produto save(@RequestBody @Valid Produto produto)
     {
         return repository.save(produto);
     }
@@ -43,7 +45,7 @@ public class ProdutoController
 
     @ResponseStatus(NO_CONTENT)
     @PutMapping(value = {"{id}"})
-    public void update(@RequestBody Produto produto, @PathVariable(name = "id")  Integer id)
+    public void update(@RequestBody @Valid Produto produto, @PathVariable(name = "id")  Integer id)
     {
         repository.findById(id).map((produtoEncontrado) -> {produto.setId(produtoEncontrado.getId()); repository.save(produto); return  Void.TYPE;})
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Produto não encontrado"));

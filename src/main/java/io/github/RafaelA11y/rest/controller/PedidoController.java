@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +30,12 @@ public class PedidoController
         this.service = service;
     }
 
+    /*Faz a inserção de um novo pedido na base de dados a partir de um json que representa o PedidoDTO que será usado para a criação do novo pedido
+    * na base de dados, o método retorna uma http status created, e o id do pedido gerado na base de dados. A anotação @Valid serve para que as restrições
+    * aplicadas aos camspo de PedidoDTO sejam validadas.*/
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer save(@RequestBody PedidoDTO dto)
+    public Integer save(@RequestBody @Valid PedidoDTO dto)
     {
         Pedido pedido = service.salvar(dto);
         return pedido.getId();
@@ -40,7 +44,7 @@ public class PedidoController
     * possui muitas informações que não precisam ser exibidas para o usuário (como o id do cliente que seria exibido se a entidade Pedido fosse
     * retornada no método ao invés de InformacoesPedidoDTO). Como o método PedidoService obterPedidoCompleto(Integer id): Optional<Pedido> pode retornar
     * valor nulo, usa-se suplier orElseThrow para lançar a exceção. Caso o método retorne um Optional<Pedido> chama-se o Function map() para converter
-    * o Pedido dentro do Optional em InfomaçõesPedidoDto.*/
+    * o Pedido dentro do Optional em InfomaçõesPedidoDto através do padrão Builder e retornar este objeto convertido.*/
     @GetMapping(value = {"{id}"})
     public InformacoesPedidoDTO getById(@PathVariable(value = "id") Integer id)
     {
@@ -50,7 +54,8 @@ public class PedidoController
 
     /*O método http put precisa de todos os campos informados para não preencher com nulo o campo do registro no banco de dados que não foi informado.
     * Para isso não acontecer, usa-se o @Patch que também é um verbo http de atualuzação, mas serve para o caso em que queremos fazer apenas uma
-    * atualização particionada.*/
+    * atualização particionada. O método estático da enum valueOf(String name) recebe uma String e se essa String for exatamente igual a um dos campos
+    * da enum, este srá convertido no campo equivalente.*/
     @PatchMapping(value = {"{id}"})
     @ResponseStatus(NO_CONTENT)
     public void updateStatus(@PathVariable(name = "id") Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto)
@@ -68,7 +73,7 @@ public class PedidoController
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .total(pedido.getPrecoTotal())
-                .status(pedido.getStatus().toString()) //.name();
+                .status(pedido.getStatus().name()) //Também pode ser usado o toString();
                 .itens(this.converter(pedido.getItens()))
                 .build();
     }

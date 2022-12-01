@@ -9,7 +9,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//Classe que representa a visualização dos itens do pedido para o front quando este faz uma requisição http get
+/*Classe que representa a visualização dos itens do pedido para o front quando este faz uma requisição http get. Uma classe DTO é útil para situações
+* que não é necessário expor para o frontend todos os dados da entidade requisitada, exemplo disso é o id do produto no banco de dados que não será
+* reveladop para o front quiando este objeto for retornado. A anotação @Data aglomera @Getter, @Setter, @RequiredArgsConstructor, @ToString,
+* @EqualsAndHashCode, e lombok.Value*/
 public class InformacaoItemPedidoDTO
 {
     private String descricaoProduto;

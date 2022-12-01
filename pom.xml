@@ -66,6 +66,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Dependência para usar as anotações de @Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+
     </dependencies>
     <!--pluguin do Spring Boot-->
     <build>

@@ -35,9 +35,15 @@ public class PedidoServiceImpl implements PedidoService
     private final Produtos produtosRepository; //Repository de produto
     private final ItensPedido itensPedidoRepository; //Repository de itensPedidos
 
+    /*A operação recebe um PedidoDTO e retorna um Pedido salvo na base de dados. A anotação @Transactional serve para que a transação no banco de dados
+    * somente seja efetuada se tudo ocorrer conforme o esperado, pois neste método, estamos persistindo 2 novos registros no banco de dados, o pedido,
+    * o novo item, por isso é necessário garantir que os dados sejam processados apenas se tudo der certo, e não causar inconsistência de dados como
+    * registrar um pedido associado a itens que não estão registrados no banco. Após o pedido ser salvo no banco de dados, os seu itens são salvos
+    * no banco, pois como um pedido tem vários itens, significa que a foreign key estará presente na tabela ITEM_PEDIDO, referenciando a tabela PEDIDO,
+    * e assim sendo não é possível registrar um itemPedido sem antes registrar um pedido.*/
     @Override
-    @Transactional //Ou salva tudo com sucesso, ou nada é salvo. Caso algum erro aconteça, a aplicação dá um rollback, ou tudo é salvo corretamente
-    public Pedido salvar(PedidoDTO dto) { //ou nada é salvo.
+    @Transactional
+    public Pedido salvar(PedidoDTO dto) {
         Integer idCliente = dto.getCliente();
         Cliente cliente = clientesRepository.findById(idCliente).orElseThrow(() -> new RegraNegocioException("Código de cliente inválido: " + idCliente));
 
@@ -54,6 +60,8 @@ public class PedidoServiceImpl implements PedidoService
         return pedido;
     }
 
+    /*Recebe um id e um StatusPedido, procura o pedido na base de dados pelo id informado e se este existir, seta seu status com o valor de StatusPedido
+    * informado e chama o save() para salvar a alteração no banco de dados, caso contrário chama a excpetion PedidoNaoEncontradoException.*/
     @Override
     @Transactional
     public void atualizaStatusPedido(Integer id, StatusPedido statusPedido)
@@ -64,6 +72,8 @@ public class PedidoServiceImpl implements PedidoService
         }).orElseThrow(() -> new PedidoNaoEncontradoException());
     }
 
+    /*Método privado que serve para ser chamado por public Pedido salvar(PedidoDTO dto), converte a List<ItemPedidoDTO> em List<ItemPedido> associada
+    * ao pedido passado por parâmetro e ao produto recuperado por pesquisa no banco de dados, essa operação acontece a partir de um map().*/
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens)
     {
         if(itens.isEmpty()) throw new RegraNegocioException("Não é possível realizar um pedido sem itens");
