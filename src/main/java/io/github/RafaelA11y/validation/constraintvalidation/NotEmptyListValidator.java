@@ -12,12 +12,12 @@ import java.util.List;
 * é o tipo de dado que será validado pela anotação customizada NotEmptyList*/
 public class NotEmptyListValidator implements ConstraintValidator<NotEmptyList, List>
 {
-    /*Serve para se necessário inicializar os valores da anotação @NotEmptyList, repare qu o método initialize() inicia um objeto NotEmptyList*/
+    /*Serve para se necessário inicializar os valores da anotação @NotEmptyList, repare que o método initialize() inicia um objeto NotEmptyList*/
     @Override
     public void initialize(NotEmptyList constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
-
+    //Verifica se o objeto é válido, caso o método retorne falso, o erro de validação é ativado e a propriedade message é exibida.
     @Override
     public boolean isValid(List value, ConstraintValidatorContext context)
     {

@@ -21,15 +21,18 @@ public class Produto
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
     private Integer id;
 
-    /*Campo descricao é validado por @NotEmpty que não aceita valor nulo ou em branco. */
+    /*Campo descricao é validado por @NotEmpty que não aceita valor nulo ou em branco, o atributo message especifica a mensagem que irá aparecer caso
+    o usuário tente incluir um valor nulo ou branco no campo descrição, neste caso, ao invés de as mensagens serem inseridas diretamente no atributo,
+    fez-se uso de internacionalização, isto  é as mensagens de validação estão no arquivo messages.properties, e o valor da propriedade message é a
+    chave que referencia a mensagem adequada dentro de message.properties. */
     @Column(name = "descricao")
-    @NotEmpty(message = "Campo descrição é obrigatório")
+    @NotEmpty(message = "{campo.descricao.obrigatorio}")
     private String descricao;
 
     /*Campo precoUnitario é validado por @NotNull, como se trata de uma caqmpo númerico, não existe a possibilidade de ser um valor vazio, ou é
     * prenchido, ou é nulo, a anotação @Min especifica um valor mínimo, pois como sabemos, preço negativo não faz sentido. */
     @Column(name = "preco_unitario")
-    @NotNull(message = "Campo preço unitário é obrigatório")
+    @NotNull(message = "{campo.preco.obrigatorio}")
     @Min(value = 0, message = "O preço deve ser maior ou igual a zero")
     private BigDecimal precoUnitario;
 

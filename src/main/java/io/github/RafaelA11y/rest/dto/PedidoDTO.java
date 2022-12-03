@@ -31,16 +31,21 @@ import java.util.List;
 * Cliente, e tudo o que precisamos é o id do cliente e não um objeto completo de Cliente. Também não é preciso definir um status para o novo pedido
 * pois tal atributo é gardo após a realização do pedido pela web service em io.github.RafaelA11y.service.impl.PedidoServiceImpl, e nem uma data para
 * a classe DTO pois a data de realização também é gerada pela web service pela io.github.RafaelA11y.service.impl.PedidoServiceImpl Por isso a
-* importância de uma classe DTO, pois dependendo da operação, não é necessário os vários atributos do objeto a ser inserido no banco de dados.*/
+* importância de uma classe DTO, pois dependendo da operação, não é necessário os vários atributos do objeto a ser inserido no banco de dados.
+*
+* Campo cliente é validado por @NotNull que não aceita valor nulo, o atributo message especifica a mensagem que irá aparecer caso
+    o usuário tente incluir um valor nulo no campo cliente, neste caso, ao invés de as mensagens serem inseridas diretamente no atributo,
+    fez-se uso de internacionalização, isto é as mensagens de validação estão no arquivo messages.properties, e o valor da propriedade message é a
+    chave que referencia a mensagem adequada dentro de message.properties.*/
 public class PedidoDTO
 {
 
-    @NotNull(message = "Informe o código do cliente")
+    @NotNull(message = "{campo.codigo-cliente.obrigatorio}")
     private Integer cliente; //Representa o id do cliente
-    @NotNull(message = "Campo total do pedido é obrigatório")
+    @NotNull(message = "{campo.total-pedido.obrigatorio}")
     @Min(value = 0)
     private BigDecimal total;//Representa o valor total do pedido
-    @NotEmptyList(message = "Pedido não pode ser realizado sem itens")
+    @NotEmptyList(message = "{campo.itens-pedido.obrigatorio}")
     private List<ItemPedidoDTO> itens;
     /*Repare que o array do json é abstraído para uma List<ItemPedidoDTO> itens, ainda assim é necessário uma classe
     ItemPedidoDTO para representar individualmente cada elemento do array do json, pois não queremos inserir todos os dados*/

@@ -28,15 +28,20 @@ public class Cliente
       @NotEmpty: Assim como a @NotNull, não permite valor nulo e além disso seu tamanho deve ser maior que zero. Espaços em brancos são
         levados em conta na verificação de tamanho do valor. Ou seja, o json recebido pela web service terá que ter um campo nome e este deverá
         estar preenchido, não sendo aceito campo nome nulo ouy de String vazia.
-      @NotBlank: Assim como a @NotEmpty, não permite valor nulo e o comprimento (sem considerar espaços em branco) deve ser maior que zero.*/
+      @NotBlank: Assim como a @NotEmpty, não permite valor nulo e o comprimento (sem considerar espaços em branco) deve ser maior que zero.
+
+      Campo nome é validado por @NotEmpty que não aceita valor nulo ou em branco, o atributo message especifica a mensagem que irá aparecer caso
+        o usuário tente incluir um valor nulo ou branco no campo descrição, neste caso, ao invés de as mensagens serem inseridas diretamente no atributo,
+        fez-se uso de internacionalização, isto é as mensagens de validação estão no arquivo messages.properties, e o valor da propriedade message é a
+        chave que referencia a mensagem adequada dentro de message.properties.*/
     @Column(name = "nome", length = 100)
-    @NotEmpty(message = "Campo nome é obrigatório")
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
-    /*A anotação @CPF inclui a lógica de cpf de 11 dígitos que sejam válidos, enquanto que @NotEmpity não permite campo em branco.*/
+    /*A anotação de validação @CPF inclui a lógica de cpf de 11 dígitos que sejam válidos, enquanto que @NotEmpity não permite campo em branco.*/
     @Column(name = "cpf", length = 11)
-    @NotEmpty(message =  "Campo CPF é obrigatório")
-    @CPF(message = "Informe um CPF válido")
+    @NotEmpty(message =  "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
     private String cpf;
 
     public Cliente(String nome)
