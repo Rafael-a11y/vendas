@@ -73,6 +73,13 @@
             <version>2.6.4</version>
         </dependency>
 
+        <!-- Dependência do Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+
     </dependencies>
     <!--pluguin do Spring Boot-->
     <build>
