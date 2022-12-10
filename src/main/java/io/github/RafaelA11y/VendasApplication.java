@@ -18,12 +18,12 @@ public class VendasApplication
 {
 // O @Bean serve para o Spring executar o método.
     @Bean
-    public CommandLineRunner commandLineRunner(@Autowired Produtos produtos)
+    public CommandLineRunner commandLineRunner(@Autowired Clientes clientes)
     {
         return args ->
         {
-            Produto p = new Produto(0, "Um produto de qualidade feito com poliester", new BigDecimal(10.00));
-            produtos.save(p);
+            Cliente c = new Cliente("Rafael Souto", "06763614128");
+            clientes.save(c);
         };
     }
 

@@ -44,9 +44,10 @@ public class Cliente
     @CPF(message = "{campo.cpf.invalido}")
     private String cpf;
 
-    public Cliente(String nome)
+    public Cliente(String nome, String cpf)
     {
         this.nome = nome;
+        this.cpf = cpf;
     }
 
     /*Usamos o Atributo mappedBy porque a tabela pedido possui uma foreign cliente_id que aponta para a tabela cliente, para tornar os
