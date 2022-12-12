@@ -48,13 +48,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     resources/static ou resources/public ou resources/templates. Foi definido que o usuário que tiver papel de USER ou ADMIN tem permissão para
      acessar o caminho /api/clientes/** com o método hasAnyHole(String[] roles) que aceita vários argumentos, o mesmo acontece com o caminho
      /api/pedidos/**, já o caminho /api/produtos/** pode ser acessado apenas por um usuário com perfil ADMIN, como nosso usuário Fulano em tanto
-      o perfil de USER e ADMIN, ele pode acessar todos os três caminhos*/
+      o perfil de USER e ADMIN, ele pode acessar todos os três caminhos. Uma outra forma de configurar a autenticação é com o httpBasic() que define
+     uma autenticação mais simples que é usada dentro do postman. */
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception
     {
         http.csrf().disable().authorizeRequests().antMatchers("/api/clientes/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/produtos/**").hasRole("ADMIN")
-                .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN").and().formLogin();
+                .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN").and().httpBasic();
     }
 }
