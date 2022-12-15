@@ -21,8 +21,7 @@ public class ClienteController
 {
 
     private Clientes clientes;
-
-    @Autowired
+//@Autowired aqui caso dê merda.
     public ClienteController(Clientes clientes)
     {
         this.clientes = clientes;

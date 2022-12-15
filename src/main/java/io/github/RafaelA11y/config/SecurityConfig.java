@@ -1,6 +1,9 @@
 package io.github.RafaelA11y.config;
 
+import io.github.RafaelA11y.service.impl.UsuarioServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,8 +18,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UsuarioServiceImpl usuarioService;
+
     /*O BCriptyPasswordEncoder serve para fazer a criptogrfia das senhas e correspondências das senhas criptografadas.*/
-    @Bean
+    @Bean(name = "beanEncoder")
     public PasswordEncoder passwordEncoder()
     {
         return new BCryptPasswordEncoder();
@@ -24,15 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /*Este método define uma autenticação em memória, com usuário e um codificador de senha, seguido de um usuário e senha criptografada, finalizando
     * com a definição de papel para o usuário definido. Foi criado um usuário Fulano com password senha123 que possui tanto papel de USER e ADMIN,
-    * o método roles(String[] args) também suporta array de argumentos String.*/
+    * o método roles(String[] args) também suporta array de argumentos String. O userDetailService() carrega o usuário enquanto que o passwordEncoder()
+    * compara a senha do usuário.*/
    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception
     {
-         auth.inMemoryAuthentication()
-                .passwordEncoder(this.passwordEncoder())
-                .withUser("Fulano")
-                .password(passwordEncoder().encode("senha123"))
-                .roles("USER", "ADMIN");
+         auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
     }
 
 
