@@ -34,6 +34,7 @@ public class UsuarioServiceImpl implements UserDetailsService
     {
         Usuario usuario = usuarios.findByLoguin(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado no banco de dados"));
 
+        //Caso o usuário seja admin, retorna um vetor com os papéis de ADMIN e USER, caso contrário um vetor com String USER.
         String roles[] = usuario.isAdmin() ?
                 new String[]{"USER", "ADMIN"} : new String[]{"USER"};
 

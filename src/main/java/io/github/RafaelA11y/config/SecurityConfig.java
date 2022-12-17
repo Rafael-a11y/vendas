@@ -4,6 +4,7 @@ import io.github.RafaelA11y.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,7 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      acessar o caminho /api/clientes/** com o método hasAnyHole(String[] roles) que aceita vários argumentos, o mesmo acontece com o caminho
      /api/pedidos/**, já o caminho /api/produtos/** pode ser acessado apenas por um usuário com perfil ADMIN, como nosso usuário Fulano em tanto
       o perfil de USER e ADMIN, ele pode acessar todos os três caminhos. Uma outra forma de configurar a autenticação é com o httpBasic() que define
-     uma autenticação mais simples que é usada dentro do postman. */
+     uma autenticação mais simples que é usada dentro do postman.
+     O método antMatchers() também pode receber uma constante de HttpMethod para especificar o verbo http que será usado, o permitAll() serve para
+     permitir que qualquer pessoa não registrada no sistema possa fazer um post de usuário (criar seu usuário). Para o caso de eu ter esquecido de
+     mapear qualquer outra url, usei anyRequest().autheticated() para que o acesso de qualquer outra url deva ser feito somente após autheticação.*/
+
+
 
 
     @Override
@@ -60,6 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     {
         http.csrf().disable().authorizeRequests().antMatchers("/api/clientes/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/produtos/**").hasRole("ADMIN")
-                .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN").and().httpBasic();
+                .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
+                .anyRequest().authenticated()
+                .and().httpBasic();
     }
 }

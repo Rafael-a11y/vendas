@@ -17,13 +17,13 @@ public class UsuarioController
 {
     private final UsuarioServiceImpl usuarioService;
     private final PasswordEncoder passwordEncoder;
-
+    /*Retorna um Usuario e registra um novo usuário com senha criptografada no banco de dados. Sempre que um método da camada de controle for manipular
+    * uma entidade validada, precisa fazer uso da anotação @Valid*/
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Usuario salvar(@RequestBody @Valid Usuario usuario)
     {
-        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCriptografada);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioService.salvar(usuario);
     }
 }

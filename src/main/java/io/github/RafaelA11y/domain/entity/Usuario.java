@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+/*Entidade Usuario*/
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,11 +23,11 @@ public class Usuario
     private Integer id;
 
     @Column(name = "loguin")
-    @NotEmpty(message = "{campo.loguin.obrigatorio}")
+    @NotEmpty(message = "{campo.loguin.obrigatorio}") //Propriedade message serve para exibir uma mensagem caso a restrição não seja atendida
     private String loguin;
 
     @Column(name = "senha")
-    @NotEmpty(message = "{campo.senha.obrigatorio}")
+    @NotEmpty(message = "{campo.senha.obrigatorio}") //O valor é uma chave presente em messages.properties que contêm um valor de texto.
     private String senha;
 
     @Column(name = "admin")
