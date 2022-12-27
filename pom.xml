@@ -80,6 +80,20 @@
             <version>2.6.4</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+             Dependência do jjwt que é uma biblioteca jwt para o java, bibliotecas jwt são
+             úteis para a segurança dos arquivos de transmissão de dados como json, xml
+             etecetera.-->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+
+
     </dependencies>
     <!--pluguin do Spring Boot-->
     <build>
