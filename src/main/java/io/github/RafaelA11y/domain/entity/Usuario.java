@@ -15,11 +15,11 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuario")
 public class Usuario
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "loguin")

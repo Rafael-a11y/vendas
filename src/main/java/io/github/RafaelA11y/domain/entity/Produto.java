@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Data
 public class Produto
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private Integer id;
 
     /*Campo descricao é validado por @NotEmpty que não aceita valor nulo ou em branco, o atributo message especifica a mensagem que irá aparecer caso

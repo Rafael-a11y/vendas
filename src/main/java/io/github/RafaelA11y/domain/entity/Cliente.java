@@ -21,7 +21,7 @@ import java.util.List;
 public class Cliente
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     /*@NotNull: Não permite um valor nulo, porém permite um valor vazio (no caso de String).

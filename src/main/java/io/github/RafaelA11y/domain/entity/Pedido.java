@@ -15,7 +15,7 @@ import java.util.List;
 @Entity @Table(name = "pedido")
 public class Pedido
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private Integer id;
 
     @ManyToOne

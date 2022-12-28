@@ -1,5 +1,7 @@
 package io.github.RafaelA11y.config;
 
+import io.github.RafaelA11y.security.jwt.JwtAuthFilter;
+import io.github.RafaelA11y.security.jwt.JwtService;
 import io.github.RafaelA11y.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,9 +11,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 /*Esta classe irá ter toda a configuração do Spring Security. A classe deve extender WebSecurityConfigurerAdapter para ter acesso ao método
 * sobrecarregado configure(), o service(AuthenticationManagerBuilder auth) é responsável por fazer a autenticação dos usuários enquanto o
@@ -22,11 +27,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UsuarioServiceImpl usuarioService;
 
+    @Autowired
+    private JwtService jwtService;
+
+
     /*O BCriptyPasswordEncoder serve para fazer a criptogrfia das senhas e correspondências das senhas criptografadas.*/
     @Bean(name = "beanEncoder")
     public PasswordEncoder passwordEncoder()
     {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public OncePerRequestFilter jwtFilter()
+    {
+        return new JwtAuthFilter(jwtService, usuarioService);
     }
 
     /*Este método define uma autenticação em memória, com usuário e um codificador de senha, seguido de um usuário e senha criptografada, finalizando
@@ -38,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     {
          auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
     }
-
 
     /*Este método define as autorizações de url's, csrf().disable serve para desativar o csrf(), antMatchers(String path, http verb) ou antMatchers
     * (String path) serve para definir a url e o método htttp ou somente a url, podemos usar em seguida .hasRole(String role) ou.hasAuthority
@@ -59,8 +73,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      mapear qualquer outra url, usei anyRequest().autheticated() para que o acesso de qualquer outra url deva ser feito somente após autheticação.*/
 
 
-
-
     @Override
     public void configure(HttpSecurity http) throws Exception
     {
@@ -69,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
                 .anyRequest().authenticated()
-                .and().httpBasic();
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+        and().addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

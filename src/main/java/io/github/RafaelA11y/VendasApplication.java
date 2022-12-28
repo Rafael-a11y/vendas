@@ -5,6 +5,7 @@ import io.github.RafaelA11y.domain.entity.Produto;
 import io.github.RafaelA11y.domain.entity.Usuario;
 import io.github.RafaelA11y.domain.repository.Clientes;
 import io.github.RafaelA11y.domain.repository.Produtos;
+import io.github.RafaelA11y.security.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +25,7 @@ public class VendasApplication
         return args ->
         {
             Usuario user = Usuario.builder().loguin("Fulano").build();
-            System.out.println(service.gerarToken(user));
+            System.out.println("TUDO OK!");
         };
     }
 

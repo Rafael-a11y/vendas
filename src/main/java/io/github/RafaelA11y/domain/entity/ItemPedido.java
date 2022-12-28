@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity @Table(name = "item_pedido")
 public class ItemPedido
 {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private Integer id;
 
     /*Como a tabela de item_pedido tem uma foreign key, não precisamos usar o mappedBy dentro de @ManyToOne. O @JoinColumn é similar

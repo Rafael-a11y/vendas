@@ -1,5 +1,6 @@
-package io.github.RafaelA11y;
+package io.github.RafaelA11y.security.jwt;
 
+import io.github.RafaelA11y.VendasApplication;
 import io.github.RafaelA11y.domain.entity.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -89,13 +90,14 @@ public class JwtService
     * contêm o loguin do usuário que gerou o token.*/
     public String obterLoguinUsuario(String token) throws ExpiredJwtException
     {
+        // E se eu não fizer um cast para String? Este método obtem o loguin do usuário para saber quem ele é
         return (String) this.obterClaims(token).getSubject();
     }
 
     public static void main(String[] args) {
-        //Cria o contexto da aplicação Spring
+        //Captura o contexto da aplicação Spring
         ConfigurableApplicationContext contexto = SpringApplication.run(VendasApplication.class);
-        /*Inicia o objeto JwtService a partir da extração dos beans da classe, ou seja: o bjeto será instanciado com os seus atributos String chave de
+        /*Inicia o objeto JwtService a partir da extração dos beans da classe, ou seja: o objeto será instanciado com os seus atributos String chave de
         assinatura e expiracaqo prenchidos pelas chaves do applications.properties (setados pela anotação @Value("${chave do application.properties}"))*/
         JwtService service = contexto.getBean(JwtService.class);
         Usuario usuario = Usuario.builder().loguin("Fulano").build();
