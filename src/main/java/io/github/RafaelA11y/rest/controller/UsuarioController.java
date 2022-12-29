@@ -43,11 +43,13 @@ public class UsuarioController
     {
         try
         {
+            //Cria um Usuario
             Usuario usuario = Usuario.builder().
                     loguin(credenciaisDTO.getLoguin()).
                     senha(credenciaisDTO.getSenha()).
                     build();
-           UserDetails usuarioAutenticado =  usuarioService.autenticar(usuario);
+            //Recebe um UserDetails
+            usuarioService.autenticar(usuario);
            String token = jwtService.gerarToken(usuario);
            return new TokenDTO(usuario.getLoguin(), token);
         }

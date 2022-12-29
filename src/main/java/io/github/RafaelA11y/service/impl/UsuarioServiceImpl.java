@@ -31,6 +31,7 @@ public class UsuarioServiceImpl implements UserDetailsService
 
     public UserDetails autenticar(Usuario usuarioP)
     {
+        //Carrega o usuário na base de dados e o joga dentro da variável UserDetails usuario
         UserDetails usuario = loadUserByUsername(usuarioP.getLoguin());
         //Compara as senhas, o primeiro parâmetro é a senha que deve ser comparada, o segundo parâmtro é a senha recuperada do banco de dados.
         boolean senhasBatem = encoder.matches(usuarioP.getSenha(), usuario.getPassword());
@@ -46,6 +47,7 @@ public class UsuarioServiceImpl implements UserDetailsService
     @Override()
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
+        //Procura o usuário no banco de dados com o nome de loguin passado de parâmetro
         Usuario usuario = usuarios.findByLoguin(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado no banco de dados"));
 
         //Caso o usuário seja admin, retorna um vetor com os papéis de ADMIN e USER, caso contrário um vetor com String USER.

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    //Construtor de JwtAuthFilter que recebe um UsuarioServiceImpl e JwtService.
     @Bean
     public OncePerRequestFilter jwtFilter()
     {
@@ -48,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     * com a definição de papel para o usuário definido. Foi criado um usuário Fulano com password senha123 que possui tanto papel de USER e ADMIN,
     * o método roles(String[] args) também suporta array de argumentos String. O userDetailService() carrega o usuário enquanto que o passwordEncoder()
     * compara a senha do usuário.*/
-   @Override
+//   @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception
     {
          auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
@@ -81,7 +83,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/pedidos/**") .hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
                 .anyRequest().authenticated()
+                //Define  criação de sessão como sem estado, agora toda requisição nececitará de um token jwt;
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-        and().addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                //Adiciona o filtro que foi criado, o JwtFilter, que é executado antes do UsernamePasswordAuthenticationFilter
+        and().addFilterBefore(this.jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception
+    {
+        //Configurando para o Spring Security não submeter esses links que contêm recursos do swagger ao filtro de segurança.
+        web.ignoring().antMatchers(
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui/**",
+                "/webjars/**");
+
     }
 }

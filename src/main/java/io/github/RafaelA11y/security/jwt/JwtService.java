@@ -94,19 +94,19 @@ public class JwtService
         return (String) this.obterClaims(token).getSubject();
     }
 
-    public static void main(String[] args) {
-        //Captura o contexto da aplicação Spring
-        ConfigurableApplicationContext contexto = SpringApplication.run(VendasApplication.class);
-        /*Inicia o objeto JwtService a partir da extração dos beans da classe, ou seja: o objeto será instanciado com os seus atributos String chave de
-        assinatura e expiracaqo prenchidos pelas chaves do applications.properties (setados pela anotação @Value("${chave do application.properties}"))*/
-        JwtService service = contexto.getBean(JwtService.class);
-        Usuario usuario = Usuario.builder().loguin("Fulano").build();
-        String token = service.gerarToken(usuario);
-        System.out.println("TOKEN JWT GERADO: " + token);
-
-        boolean isTokenValido = service.tokenValido(token);
-        System.out.println("O token está válido? " + isTokenValido);
-        System.out.println(service.obterLoguinUsuario(token));
-    }
+//    public static void main(String[] args) {
+//        //Captura o contexto da aplicação Spring
+//        ConfigurableApplicationContext contexto = SpringApplication.run(VendasApplication.class);
+//        /*Inicia o objeto JwtService a partir da extração dos beans da classe, ou seja: o objeto será instanciado com os seus atributos String chave de
+//        assinatura e expiracaqo prenchidos pelas chaves do applications.properties (setados pela anotação @Value("${chave do application.properties}"))*/
+//        JwtService service = contexto.getBean(JwtService.class);
+//        Usuario usuario = Usuario.builder().loguin("Fulano").build();
+//        String token = service.gerarToken(usuario);
+//        System.out.println("TOKEN JWT GERADO: " + token);
+//
+//        boolean isTokenValido = service.tokenValido(token);
+//        System.out.println("O token está válido? " + isTokenValido);
+//        System.out.println(service.obterLoguinUsuario(token));
+//    }
 
 }

@@ -96,8 +96,19 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <!-- Dependência do Swagger2 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
-
+        <!-- Esta dependência traz uma interface para visualização da interface gráficfa e possibilita fazer as requisições http -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
     </dependencies>
     <!--pluguin do Spring Boot-->
