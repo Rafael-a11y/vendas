@@ -2,6 +2,7 @@ package io.github.RafaelA11y.rest.controller;
 
 import io.github.RafaelA11y.domain.entity.Cliente;
 import io.github.RafaelA11y.domain.repository.Clientes;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,6 +18,7 @@ import java.util.List;
 * */
 @RestController
 @RequestMapping("api/clientes")
+@Api("Api clientes") //Nome da Api
 public class ClienteController
 {
 
@@ -32,7 +34,11 @@ public class ClienteController
       pode fazer com que o método retorne uma mensagem de status 404 de recurso não encontrado*/
 
     @GetMapping(value = {"{codigoCliente}"})
-    public Cliente getClienteById(@PathVariable(name = "codigoCliente") Integer id)
+    @ApiOperation("Obter detalhes de um cliente") //Nome do método que aparece na interface do Swagger
+    @ApiResponses({@ApiResponse(code = 200, message = "Cliente encontrado com sucesso!"), //Respostas de sucesso e de fracasso.
+            @ApiResponse(code = 400, message = "Erro de validação.")})
+
+    public Cliente getClienteById(@ApiParam("Id do cliente.") @PathVariable(name = "codigoCliente") Integer id)
     {
         return clientes.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado HEHEEHEHEHEHE"));
     }
@@ -43,6 +49,9 @@ public class ClienteController
     * Caso @Valid não seja declarado, uma execução em tempo de execução acontecerá e uma mensagem 500 será gerada. */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Salvar um cliente") //O que faz o método
+    @ApiResponses({@ApiResponse(code = 201, message = "Cliente persistido com sucesso!"), @ApiResponse(code = 404, message = "Cliente não encontrado" +
+            " com o id fornecido.")})
     public Cliente salvar(@RequestBody @Valid Cliente cliente)
     {
         return clientes.save(cliente);

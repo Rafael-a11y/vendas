@@ -8,6 +8,9 @@
     <groupId>io.github.Rafael-a11y</groupId> <!--Group da empresa-->
     <artifactId>vendas</artifactId>            <!--Nome do projeto maven-->
     <version>1.0-SNAPSHOT</version>          <!--versao do snapshot-->
+    <packaging>${project.packaging}</packaging> <!-- 1º Comando para poder gerar o .war, o produto final do projeto será um .war
+     Como agora nós temos os tipos de builds war e jar separados por perfis de desenvolvimento, o valor da tag <packaging> é uma expressão
+     ${project.packaging} para referenciar as propriedades project.packaging dos perfis de desenvolvimento e produção -->
 
     <!--Adicionei o starter parent 2.24 para que a partir disso a aplicação passe a ser uma aplicação Spring
         Boot, lembre-se de eliminar o <type>. O <parent> possui as bibliotecas basicas para a nossa
@@ -17,7 +20,29 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.3</version>
     </parent>
+    <!-- Tag para criação de perfis para builds diferentes -->
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault> <!-- Esta tag define por padrão que o perfil que será usado para gerar o arquivo externo será o de desenvolvimento -->
+            </activation>
+            <id>desenvolvimento</id>
+            <properties>
+                <project.packaging>jar</project.packaging>
+                <tomcat.scope>compile</tomcat.scope>
+            </properties>
+        </profile>
+        <!-- Para criar o jar ou war (já que agora temos dois perfis, um de produção e outro de desenvolvimento) usa-se o comando 'mvn clean package
+         -P desenvolvimento ou -P producao '-->
+        <profile>
+            <id>producao</id>
+           <properties>
+               <project.packaging>war</project.packaging>
+               <tomcat.scope>provided</tomcat.scope>
+           </properties>
+        </profile>
 
+    </profiles>
 
     <!-- Adicioonando as primeiras dependências, que são básicas para o Spring funcionar. Ou seja,
     os tarters básicos para a aplicação Spring Boot funcionar são, o <parent> e a <dependency>
@@ -50,6 +75,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 2º passo pare gerar a aplicação war, usar a dependência spring-boot-starter-tomcat, e usar a propriedade <scope>provided</scope> -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>${tomcat.scope}</scope> <!-- Tag prenchida com expresão ${tomcat.scope} para referenciar a tag <tomcat.scope> -->
         </dependency>
 
         <dependency>
@@ -119,6 +150,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.4</version>
             </plugin>
+
+            <!-- Plugin para conseguir gerar o vendas-1.0-SNAPSHOT.jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+
         </plugins>
     </build>
 
