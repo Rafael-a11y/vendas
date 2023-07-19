@@ -1,5 +1,10 @@
 <h1 align="center"> Web Service de Vendas em Java</h1>
 
+<p align="center">
+  <img src="https://github.com/Rafael-a11y/vendas/assets/63820646/82de1548-020f-4806-af66-923954b01e88#vitrinedev" 
+    alt="Imagem representativa com título escrito: Web Service de Vendas - Java">
+</p>
+
 <p>Web Service para e-commerce desenvolvida com <strong>Java e Spring Boot</strong></p>
 
 
