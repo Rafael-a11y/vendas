@@ -8,6 +8,9 @@
     <groupId>io.github.Rafael-a11y</groupId> <!--Group da empresa-->
     <artifactId>vendas</artifactId>            <!--Nome do projeto maven-->
     <version>1.0-SNAPSHOT</version>          <!--versao do snapshot-->
+    <packaging>${project.packaging}</packaging> <!-- 1º Comando para poder gerar o .war, o produto final do projeto será um .war
+     Como agora nós temos os tipos de builds war e jar separados por perfis de desenvolvimento, o valor da tag <packaging> é uma expressão
+     ${project.packaging} para referenciar as propriedades project.packaging dos perfis de desenvolvimento e produção -->
 
     <!--Adicionei o starter parent 2.24 para que a partir disso a aplicação passe a ser uma aplicação Spring
         Boot, lembre-se de eliminar o <type>. O <parent> possui as bibliotecas basicas para a nossa
@@ -17,7 +20,29 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.3</version>
     </parent>
+    <!-- Tag para criação de perfis para builds diferentes -->
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault> <!-- Esta tag define por padrão que o perfil que será usado para gerar o arquivo externo será o de desenvolvimento -->
+            </activation>
+            <id>desenvolvimento</id>
+            <properties>
+                <project.packaging>jar</project.packaging>
+                <tomcat.scope>compile</tomcat.scope>
+            </properties>
+        </profile>
+        <!-- Para criar o jar ou war (já que agora temos dois perfis, um de produção e outro de desenvolvimento) usa-se o comando 'mvn clean package
+         -P desenvolvimento ou -P producao '-->
+        <profile>
+            <id>producao</id>
+           <properties>
+               <project.packaging>war</project.packaging>
+               <tomcat.scope>provided</tomcat.scope>
+           </properties>
+        </profile>
 
+    </profiles>
 
     <!-- Adicioonando as primeiras dependências, que são básicas para o Spring funcionar. Ou seja,
     os tarters básicos para a aplicação Spring Boot funcionar são, o <parent> e a <dependency>
@@ -27,11 +52,35 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+    <!--Dependência do JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+    <!--Dependência do driver do banco de dados, h2 é um banco de dados que opera em memória, sendo assim, não há necessidade de se instalar um sistema
+     gerenciador de banco de dados, um SGBD-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
-        <!--Para poder usar @RestController para web-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--Para poder usar @RestController para web, esta dependência também serve para testar conexão com banco de dados em memória, o H2.
+        Isso acontece porquê o banco de dados H2 é uma aplicação web, e para podermos acessá-lo, devemos definir sua url no application.properties
+        com o comando de chave valor spring.h2.console.path=/h2-console. Certifique-se de ter esta dependência quando for trabalhar com REST.-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 2º passo pare gerar a aplicação war, usar a dependência spring-boot-starter-tomcat, e usar a propriedade <scope>provided</scope> -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>${tomcat.scope}</scope> <!-- Tag prenchida com expresão ${tomcat.scope} para referenciar a tag <tomcat.scope> -->
         </dependency>
 
         <dependency>
@@ -45,7 +94,53 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-       <!--Por enquanto vamos deixar de lado o security, o data-jpa-->
+       <!--Dependência do Lombok-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Dependência para usar as anotações de @Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+
+        <!-- Dependência do Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+             Dependência do jjwt que é uma biblioteca jwt para o java, bibliotecas jwt são
+             úteis para a segurança dos arquivos de transmissão de dados como json, xml
+             etecetera.-->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <!-- Dependência do Swagger2 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <!-- Esta dependência traz uma interface para visualização da interface gráficfa e possibilita fazer as requisições http -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
     </dependencies>
     <!--pluguin do Spring Boot-->
     <build>
@@ -55,6 +150,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.4</version>
             </plugin>
+
+            <!-- Plugin para conseguir gerar o vendas-1.0-SNAPSHOT.jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+
         </plugins>
     </build>
 
